@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:imc_flutter/model/imc_class.dart';
 import 'package:imc_flutter/model/resultado_Imc_Class.dart';
-import 'package:imc_flutter/repository/calculos_imc_anteriores.dart';
+import 'package:imc_flutter/pages/card_imc_page.dart';
 import 'package:imc_flutter/shared/app_image.dart';
 import 'package:imc_flutter/shared/widgets/text_label.dart';
 
@@ -17,13 +17,23 @@ class CalcularImcPage extends StatefulWidget {
 class _CalcularImcPageState extends State<CalcularImcPage> {
   TextEditingController alturaController = TextEditingController(text: "");
   TextEditingController pesoController = TextEditingController(text: "");
-  var IcmAnteriores = ImcAnterioresRepository();
   var _imc = const <ResultadoImcAnteriores>[];
-
+  List<String> items = [];
   AppStorageService storage = AppStorageService();
 
   @override
-  void initState() => super.initState();
+  void initState() {
+    super.initState();
+
+    // Adiciona alguns itens à lista
+    /*  for (var i = 0; i < 10; i++) {
+      items.add("Item $i");
+    } */
+  }
+
+  void ListItems(String txt) {
+    items.add(txt);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +41,9 @@ class _CalcularImcPageState extends State<CalcularImcPage> {
     String resulClasificacao = '';
     double resultImc = 0;
     String resultImage = '';
+    int tituloList = 0;
+    CardImc ImcCard = CardImc();
+    List<Widget> children = [];
 
     void _esconderTeclado(BuildContext context) {
       FocusScope.of(context).unfocus();
@@ -51,6 +64,8 @@ class _CalcularImcPageState extends State<CalcularImcPage> {
 
       debugPrint(resultImc.toString());
       debugPrint(CalcularImc.getSaude);
+      tituloList = tituloList + 1;
+      ImcCard.createState().addChild("oi");
     }
 
     return Scaffold(
@@ -132,17 +147,24 @@ class _CalcularImcPageState extends State<CalcularImcPage> {
                                         ?.unfocus();
 
                                     Navigator.pop(context);
-
+                                    setState(() {
+                                      ListItems(
+                                          "Seu IMC é de: $resultImc \n Classificação: ${resulClasificacao.toString()}");
+                                      /*  ListItems(
+                                          "Classificação: ${resulClasificacao.toString()}"); */
+                                    });
                                     alturaController.clear();
                                     pesoController.clear();
                                   },
-                                  child: Text("Salvar")),
+                                  child: const Text("Salvar")),
                               ElevatedButton(
                                   style: const ButtonStyle(
                                       backgroundColor: MaterialStatePropertyAll(
                                           Colors.redAccent)),
                                   onPressed: () {
                                     Navigator.pop(context);
+                                    alturaController.clear();
+                                    pesoController.clear();
                                   },
                                   child: const Text("Descartar")),
                             ],
@@ -163,16 +185,22 @@ class _CalcularImcPageState extends State<CalcularImcPage> {
             ),
             const SizedBox(height: 10),
             Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15)),
-              shadowColor: Colors.blueAccent,
               elevation: 8,
-              child: Column(
-                children: [
-                  InkWell(
-                    child: Image.asset(AppImage.imc, height: 150),
-                  ),
-                ],
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: items.map((item) {
+                    return Column(
+                      children: [
+                        Text(item,
+                            style: const TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold)),
+                        const Text(
+                            "------------------------------------------------")
+                      ],
+                    );
+                  }).toList(),
+                ),
               ),
             ),
           ],

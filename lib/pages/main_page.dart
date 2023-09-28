@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:imc_flutter/pages/calcular_imc_page.dart';
 import 'package:imc_flutter/pages/home.dart';
-import 'package:imc_flutter/pages/imc_anteriores.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -32,7 +31,6 @@ class _MainPageState extends State<MainPage> {
               children: const [
                 Home(),
                 CalcularImcPage(),
-                ImcAnteriores(),
               ],
             ),
           ),
@@ -46,8 +44,6 @@ class _MainPageState extends State<MainPage> {
                 BottomNavigationBarItem(label: "Home", icon: Icon(Icons.home)),
                 BottomNavigationBarItem(
                     label: "Calcular IMC", icon: Icon(Icons.calculate)),
-                BottomNavigationBarItem(
-                    label: "IMC Anteriores", icon: Icon(Icons.list_alt_sharp)),
               ])
         ],
       ),
